@@ -37,5 +37,6 @@ app.get('/profile', isLoggedIn, function(req,res){
 });
 
 app.use('/auth', require('./controllers/auth'));
+app.use('/boards', require('./controllers/board'));
 
 app.listen(3000 || process.env.PORT);
