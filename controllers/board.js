@@ -9,6 +9,18 @@ var dataCleanse = require('./dataCleanse.js')
 //login get and post routes
 router.get("/allBoards", isLoggedIn, function(req, res){
 	var user = String(req.user.id)
+	var username;
+	
+
+	db.sequelize.query('SELECT distinct username from users WHERE id = :userid',
+  { replacements: { userid: [user] }, type: sequelize.QueryTypes.SELECT }
+  ).then(function(results){
+  	username = results[0].username
+  	
+  	if (username === 'admin'){
+  		res.render("boards/adminBoard")
+
+  	} else {
 
 	db.sequelize.query('SELECT * from userboards WHERE userid = :userid',
   { replacements: { userid: [user] }, type: sequelize.QueryTypes.SELECT }
@@ -19,7 +31,9 @@ router.get("/allBoards", isLoggedIn, function(req, res){
 		res.render("boards/allBoards", {results: results});
 
 	});
+ }
 
+});
 });
 
 router.get("/single/:id", isLoggedIn, function(req, res){
